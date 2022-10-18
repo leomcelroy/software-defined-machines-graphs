@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "web-dev-server --node-resolve --open --watch",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.1.32",
+    "vite": "^3.1.8"
+  },
+  "dependencies": {
+    "serialport": "^10.4.0",
+    "ws": "^8.9.0"
+  }
+}
