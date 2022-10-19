@@ -149,7 +149,7 @@ export function view(state) {
           state.selectedNodes.forEach(delete_node);
         }}>delete selected: ${state.selectedNodes.length}</div>
 
-        <a class="menu-item" href="https://github.com/leomcelroy/yada" target="_blank">github</a>
+        <a class="menu-item" href="https://github.com/leomcelroy/software-defined-machines-graphs" target="_blank">github</a>
       </div>
 
       <div class="dataflow">
