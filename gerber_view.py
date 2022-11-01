@@ -1,0 +1,60 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import re
+
+txt = """X6852212Y-2669000D02*
+X6856861Y-2674366D01*
+X6858000Y-2679600D01*
+X6858000Y-3924400D01*
+X6856000Y-3931212D01*
+X6850634Y-3935861D01*
+X6845400Y-3937000D01*
+X5219600Y-3937000D01*
+X5212788Y-3935000D01*
+X5208139Y-3929634D01*
+X5207000Y-3924400D01*
+X5207000Y-3429000D01*
+X5842000Y-3429000D01*
+X6222365Y-3386737D01*
+X6411699Y-3365700D01*
+X6411699Y-3365700D01*
+X6413500Y-3365500D01*
+X6350000Y-2921000D01*
+X6102230Y-3106828D01*
+X6095580Y-3109315D01*
+X6089035Y-3108017D01*
+X5966328Y-3046664D01*
+X5843620Y-2985310D01*
+X5843620Y-2985310D01*
+X5842000Y-2984500D01*
+X5842000Y-3429000D01*
+X5207000Y-3429000D01*
+X5207000Y-2679600D01*
+X5209000Y-2672788D01*
+X5214366Y-2668139D01*
+X5219600Y-2667000D01*
+X6845400Y-2667000D01*
+X6852212Y-2669000D01*"""
+
+pts_x = []
+pts_y = []
+
+for line in txt.split("\n"):
+    m = re.match(r"X([\d-]+)Y([\d-]+)\D01*", line)
+    x_txt = m.group(1)
+    y_txt = m.group(2)
+
+    x = float(f"{x_txt[0]}.{x_txt[1:]}")
+    y = float(f"{y_txt[0]}.{y_txt[1:]}")*10
+
+    pts_x.append(x)
+    pts_y.append(y)
+
+c = np.arange(len(pts_x))/len(pts_x)
+
+plt.figure()
+plt.scatter(pts_x, pts_y, c=c)
+plt.plot(pts_x, pts_y)
+plt.axis("equal")
+
+plt.show()

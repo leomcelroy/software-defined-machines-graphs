@@ -1,11 +1,12 @@
 import { render, html, svg } from './uhtml.js';
 import { delete_node } from "./actions/delete_node.js";
+import { click_connect, send_delete_node } from "./websocket/manager.js";
 
 const drawNodeInput = (k, index, name) => html`
   <div class="node-input">
     <div
       class=${[
-        "node-input-circle", 
+        "node-input-circle",
         "socket"
       ].join(" ")}
       data-id=${`${k}:in:${index}`}></div>
@@ -142,12 +143,21 @@ export function view(state) {
   return html`
     <div class="root">
       <div class="menu">
-        
+
         <div class="menu-item" @click=${() => { } }}>load nodes</div>
         <div class="menu-item" @click=${() => { console.log({ nodes: state.nodes, edges: state.connections }) }}>print graph</div>
         <div class="menu-item" @click=${() => {
+          if (state.websocket != null) {
+            state.selectedNodes.forEach(send_delete_node);
+          }
           state.selectedNodes.forEach(delete_node);
         }}>delete selected: ${state.selectedNodes.length}</div>
+        <div class="menu-item" @click=${click_connect}}>${state.websocket_msg}</div>
+        <div class="menu-item" @click=${() => {
+          if (state.websocket != null) {
+            state.websocket.send("Hello!");
+          }
+        }}>TEST</div>
 
         <a class="menu-item" href="https://github.com/leomcelroy/software-defined-machines-graphs" target="_blank">github</a>
       </div>

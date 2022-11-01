@@ -3,8 +3,9 @@ import { addSelectBox } from "./addSelectBox.js";
 import { addDropUpload } from "./addDropUpload.js";
 
 import { add_connection } from "./actions/add_connection.js";
-import { remove_connection } from "./actions/remove_connection.js";
+import { delete_connection } from "./actions/delete_connection.js";
 import { move_node } from "./actions/move_node.js";
+import { send_add_connection, send_delete_connection,  } from "./websocket/manager.js";
 
 
 const trigger = e => e.composedPath()[0];
@@ -79,12 +80,14 @@ function addWireManipulation(listen, state) {
         from,
         getXY(e, ".dataflow")
       ];
-      
     }
 
     if (currentIndex !== -1) {
       // console.log("remove", currentIndex);
-      remove_connection(currentIndex);
+      if (state.websocket != null) {
+        send_delete_connection(...state.connections[currentIndex]);
+      }
+      delete_connection(currentIndex);
       currentIndex = -1;
     }
   })
@@ -97,7 +100,13 @@ function addWireManipulation(listen, state) {
       // console.log("add", from, to);
       currentIndex = state.connections.findIndex( x => x[1] === to);
       if (currentIndex !== -1) {
-        remove_connection(currentIndex);
+        if (state.websocket != null) {
+          send_delete_connection(...state.connections[currentIndex]);
+        }
+        delete_connection(currentIndex);
+      }
+      if (state.websocket != null) {
+        send_add_connection(from, to);
       }
       add_connection(from, to);
     }
@@ -107,9 +116,8 @@ function addWireManipulation(listen, state) {
     currentIndex = -1;
 
     state.tempEdge = ["", [0, 0]];
-    
-  })
 
+  })
 }
 
 function addNodeDragging(listen, state) {
@@ -148,10 +156,10 @@ function addNodeDragging(listen, state) {
     // hacky bug fix, for some reason input views intefere with each other
     const tempSelected = state.selectedNodes;
     state.selectedNodes = [];
-    
+
 
     state.selectedNodes = tempSelected;
-    
+
   })
 
   listen("mousemove", "", e => {
@@ -168,7 +176,7 @@ function addNodeDragging(listen, state) {
       );
     })
 
-    
+
 
   })
 
@@ -179,7 +187,7 @@ function addNodeDragging(listen, state) {
 
     // if (state.selectedNodes.length === 1 && moved) {
     //   state.selectedNodes = [];
-    //   
+    //
     // }
 
     nodeClicked = false;

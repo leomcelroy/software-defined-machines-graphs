@@ -10,7 +10,6 @@ window.addEventListener("load", () => {
     render();
     requestAnimationFrame(r);
   };
-    
 
   render();
   addEvents(STATE);

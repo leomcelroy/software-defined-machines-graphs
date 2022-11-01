@@ -4,9 +4,9 @@ import { render } from "./render.js";
 export function delete_node(id) {
   STATE.connections = STATE.connections
     .filter(([o, i]) => !o.includes(id) && !i.includes(id));
-  
+
   delete STATE.nodes[id];
   STATE.selectedNodes = STATE.selectedNodes.filter(x => x !== id);
-  
+
   render();
 }
